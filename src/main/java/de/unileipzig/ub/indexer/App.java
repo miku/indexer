@@ -353,17 +353,6 @@ public class App {
             BulkRequestBuilder bulkRequest = client.prepareBulk();
             
             try {
-
-                final String srcSHA1 = extractSrcSHA1(filename);
-
-                logger.debug(filename + " srcsha1: " + srcSHA1);
-
-                long docsInIndex = getIndexedRecordCount(client, indexName, srcSHA1);
-                logger.debug(filename + " indexed: " + docsInIndex);
-
-                long docsInFile = getLineCount(filename);
-                logger.debug(filename + " lines: " + docsInFile);
-
                 if (cmd.hasOption("flat")) {
                     // flat mode
                     // .........
@@ -373,6 +362,17 @@ public class App {
                         quit(0);
                     }
                 } else {
+
+                    final String srcSHA1 = extractSrcSHA1(filename);
+
+                    logger.debug(filename + " srcsha1: " + srcSHA1);
+
+                    long docsInIndex = getIndexedRecordCount(client, indexName, srcSHA1);
+                    logger.debug(filename + " indexed: " + docsInIndex);
+
+                    long docsInFile = getLineCount(filename);
+                    logger.debug(filename + " lines: " + docsInFile);
+
                     // in non-flat-mode, indexing would take care
                     // of inconsistencies
                     if (docsInIndex == docsInFile) {
@@ -423,7 +423,7 @@ public class App {
                     }
                 }
 
-                logger.info("INDEXING-REQUIRED: " + filename + " (" + docsInFile + ", " + srcSHA1 + ")");
+                logger.info("INDEXING-REQUIRED: " + filename);
                 if (cmd.hasOption("status")) {
                     quit(0);
                 }
